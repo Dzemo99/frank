@@ -1,0 +1,148 @@
+---
+/**
+ * LANDINGPAGE JE LEISTUNG – Ziel-URL für die jeweilige Google-Ads-Anzeigengruppe.
+ * Inhalte kommen aus src/data/services.ts.
+ */
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import Layout from '../../layouts/Layout.astro';
+import Hero from '../../components/Hero.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import MultiStepForm from '../../components/MultiStepForm.astro';
+import ServiceCards from '../../components/ServiceCards.astro';
+import ProcessTimeline from '../../components/ProcessTimeline.astro';
+import { services } from '../../data/services';
+import { site } from '../../data/site';
+
+export function getStaticPaths() {
+  return services.map((s) => ({ params: { slug: s.slug }, props: { service: s } }));
+}
+const { service: s } = Astro.props;
+const siteUrl = (Astro.site?.toString() ?? site.url).replace(/\/$/, '');
+
+const schema = [
+  {
+    '@type': 'Service',
+    name: s.name,
+    serviceType: s.name,
+    description: s.metaDescription,
+    url: `${siteUrl}/leistungen/${s.slug}`,
+    provider: { '@id': `${siteUrl}/#organization` },
+    areaServed: { '@type': 'AdministrativeArea', name: 'Frankfurt am Main und Rhein-Main-Gebiet' },
+  },
+  {
+    '@type': 'FAQPage',
+    mainEntity: s.faq.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Start', item: `${siteUrl}/` },
+      { '@type': 'ListItem', position: 2, name: 'Leistungen', item: `${siteUrl}/leistungen` },
+      { '@type': 'ListItem', position: 3, name: s.name, item: `${siteUrl}/leistungen/${s.slug}` },
+    ],
+  },
+];
+---
+
+<Layout title={s.metaTitle} description={s.metaDescription} canonical={`/leistungen/${s.slug}`} ogImage={s.image} schema={schema}>
+  <Hero
+    compact
+    eyebrow={`${s.name} · Frankfurt & Rhein-Main`}
+    headline={s.h1}
+    text={s.intro}
+    image={s.image}
+    imageAlt={s.imageAlt}
+    primaryLabel={s.cta.button}
+  />
+
+  <!-- Breadcrumb -->
+  <nav class="border-b border-navy-100 bg-white" aria-label="Brotkrumen">
+    <ol class="container-x flex flex-wrap items-center gap-2 py-3 text-xs text-navy-500">
+      <li><a href="/" class="hover:text-navy-900">Start</a></li>
+      <li aria-hidden="true"><Icon name="lucide:chevron-right" class="h-3 w-3" /></li>
+      <li><a href="/leistungen" class="hover:text-navy-900">Leistungen</a></li>
+      <li aria-hidden="true"><Icon name="lucide:chevron-right" class="h-3 w-3" /></li>
+      <li class="font-semibold text-navy-900" aria-current="page">{s.name}</li>
+    </ol>
+  </nav>
+
+  <!-- Vorteile -->
+  <section class="section bg-white">
+    <div class="container-x">
+      <div class="max-w-3xl" data-reveal>
+        <p class="eyebrow">Ihre Vorteile</p>
+        <h2 class="mt-3 text-display-lg">Darauf können Sie sich verlassen</h2>
+      </div>
+      <ul class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4" data-reveal-group>
+        {s.benefits.map((b) => (
+          <li class="card card-hover p-6">
+            <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-navy-950 text-accent-300"><Icon name={b.icon} class="h-6 w-6" /></span>
+            <h3 class="mt-4 font-bold text-navy-950">{b.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-navy-700">{b.text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- Checkliste + Bild -->
+  <section class="section bg-mist-50">
+    <div class="container-x grid items-center gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-6" data-reveal>
+        <p class="eyebrow">Leistungsumfang</p>
+        <h2 class="mt-3 text-display-md">{s.checklistTitle}</h2>
+        <ul class="mt-8 grid gap-3">
+          {s.checklist.map((c) => (
+            <li class="flex items-start gap-3 rounded-2xl bg-white p-3.5 shadow-soft">
+              <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-gradient text-navy-950"><Icon name="lucide:check" class="h-3.5 w-3.5" /></span>
+              <span class="text-sm font-medium text-navy-900">{c}</span>
+            </li>
+          ))}
+        </ul>
+        <p class="mt-6 text-sm text-navy-600">Der genaue Umfang wird im Leistungsverzeichnis Ihres Angebots festgelegt – individuell für Ihr Objekt.</p>
+      </div>
+      <div class="space-y-5 lg:col-span-6" data-reveal>
+        <div class="overflow-hidden rounded-4xl shadow-lift" data-parallax-container>
+          <div data-parallax="8">
+            <Image src={s.secondaryImage ?? s.image} alt={s.secondaryImageAlt ?? s.imageAlt} width={1000} height={720} format="webp" quality={80} loading="lazy" decoding="async" class="h-full w-full scale-110 object-cover" />
+          </div>
+        </div>
+        <div class="card p-6">
+          <p class="eyebrow">Typische Objekte</p>
+          <ul class="mt-3 flex flex-wrap gap-2">
+            {s.objects.map((o) => <li class="chip">{o}</li>)}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section-tight bg-white">
+    <div class="container-x">
+      <div class="relative overflow-hidden rounded-4xl bg-navy-950 px-6 py-12 text-white sm:px-12" data-reveal>
+        <div class="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-accent-500/25 blur-3xl"></div>
+        <div class="relative grid items-center gap-8 lg:grid-cols-12">
+          <div class="lg:col-span-8">
+            <h2 class="text-display-md text-white">{s.cta.title}</h2>
+            <p class="mt-3 text-white/75">{s.cta.text}</p>
+          </div>
+          <div class="flex flex-col gap-3 lg:col-span-4">
+            <a href="#anfrage" class="btn-primary btn-lg justify-center">{s.cta.button} <Icon name="lucide:arrow-right" class="h-5 w-5" /></a>
+            <a href={site.phone.href} data-place="landingpage-cta" class="btn-outline-light justify-center"><Icon name="lucide:phone" class="h-4 w-4" /> {site.phone.display}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <ProcessTimeline />
+  <FaqAccordion items={s.faq} title={`Häufige Fragen zur ${s.short}`} />
+  <MultiStepForm defaultService={s.name} title={s.cta.title} text={s.cta.text} />
+  <ServiceCards exclude={s.slug} compact heading={false} />
+</Layout>

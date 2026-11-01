@@ -1,0 +1,102 @@
+---
+import { Icon } from 'astro-icon/components';
+import Logo from './Logo.astro';
+import { site, nav, ctaLabel } from '../data/site';
+
+const path = Astro.url.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/';
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+
+<header class="site-header fixed inset-x-0 top-0 z-50 border-b border-transparent bg-white/60 backdrop-blur-xl">
+  <div class="container-x flex h-[var(--header-h)] items-center justify-between gap-4">
+    <a href="/" class="shrink-0 rounded-lg" aria-label={`${site.name} – Startseite`}>
+      <Logo />
+    </a>
+
+    <nav class="hidden items-center gap-1 lg:flex" aria-label="Hauptnavigation">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class:list={[
+              'relative rounded-full px-3.5 py-2 text-sm font-medium transition-colors hover:text-electric-600',
+              isActive(item.href) ? 'text-electric-600' : 'text-navy-800',
+            ]}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+          >
+            {item.label}
+            {isActive(item.href) && <span class="absolute inset-x-3.5 -bottom-0.5 h-0.5 rounded-full bg-accent-gradient" />}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="flex items-center gap-2 sm:gap-3">
+      <a
+        href={site.phone.href}
+        data-place="header"
+        class="hidden items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold text-navy-900 transition-colors hover:text-electric-600 md:inline-flex"
+      >
+        <span class="flex h-8 w-8 items-center justify-center rounded-full bg-navy-50 text-navy-900">
+          <Icon name="lucide:phone" class="h-4 w-4" />
+        </span>
+        <span class="tabular-nums">{site.phone.display}</span>
+      </a>
+
+      <a href="/#anfrage" class="btn-primary btn-sm hidden sm:inline-flex">
+        {ctaLabel}
+        <Icon name="lucide:arrow-right" class="h-4 w-4" />
+      </a>
+
+      <button
+        type="button"
+        class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-navy-100 bg-white/80 text-navy-900 lg:hidden"
+        data-menu-toggle
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label="Menü öffnen"
+      >
+        <Icon name="lucide:menu" class="h-5 w-5" data-icon-open />
+        <Icon name="lucide:x" class="hidden h-5 w-5" data-icon-close />
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobiles Menü -->
+  <div
+    id="mobile-menu"
+    class="hidden border-t border-navy-100 bg-white/95 backdrop-blur-xl lg:hidden"
+    aria-hidden="true"
+  >
+    <nav class="container-x flex flex-col gap-1 py-4" aria-label="Mobile Navigation">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class:list={[
+              'flex items-center justify-between rounded-2xl px-4 py-3.5 text-base font-semibold',
+              isActive(item.href) ? 'bg-accent-50 text-electric-600' : 'text-navy-900 hover:bg-navy-50',
+            ]}
+          >
+            {item.label}
+            <Icon name="lucide:chevron-right" class="h-4 w-4 opacity-50" />
+          </a>
+        ))
+      }
+      <div class="mt-3 grid grid-cols-2 gap-2">
+        <a href={site.phone.href} data-place="menu" class="btn-outline">
+          <Icon name="lucide:phone" class="h-4 w-4" /> Anrufen
+        </a>
+        <a href={site.whatsapp.href} data-place="menu" target="_blank" rel="noopener" class="btn-outline">
+          <Icon name="lucide:message-circle" class="h-4 w-4" /> WhatsApp
+        </a>
+      </div>
+      <a href="/#anfrage" class="btn-primary mt-2 w-full">
+        {ctaLabel}
+        <Icon name="lucide:arrow-right" class="h-4 w-4" />
+      </a>
+    </nav>
+  </div>
+</header>
+<!-- Platzhalter für den fixierten Header -->
+<div class="h-[var(--header-h)]" aria-hidden="true"></div>

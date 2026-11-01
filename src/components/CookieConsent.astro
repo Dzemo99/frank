@@ -1,0 +1,19 @@
+---
+/**
+ * COOKIE-BANNER – PLATZHALTER-KOMPONENTE
+ * -------------------------------------------------------------------
+ * Der bestehende Banner (Google Consent Mode v2) wird 1:1 als externes
+ * Skript eingebunden:   public/js/consent.js  (+ /js/config.js davor)
+ * Beide Skripte werden in Layout.astro im <head> geladen – OHNE defer,
+ * damit die Consent-Defaults vor jedem Google-Request stehen.
+ *
+ * Das Banner-Markup erzeugt consent.js selbst (Klassen .consent-banner,
+ * .consent-inner, .consent-text, .consent-buttons – gestylt in
+ * src/styles/global.css). Diese Komponente ist bewusst leer und dient
+ * als dokumentierter Einhängepunkt, falls der Banner später als
+ * Astro-Markup gerendert werden soll.
+ *
+ * Footer-Link zum erneuten Öffnen:  <a href="#" data-consent-reset>Cookie-Einstellungen</a>
+ */
+---
+<!-- Cookie-Banner wird von /js/consent.js gerendert -->

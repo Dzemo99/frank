@@ -1,0 +1,22 @@
+---
+import { Icon } from 'astro-icon/components';
+import Layout from '../layouts/Layout.astro';
+import { site } from '../data/site';
+---
+
+<Layout title="Vielen Dank" description="Ihre Nachricht ist bei uns eingegangen." canonical="/danke" noindex hideMobileBar>
+  <section class="section bg-mist-50">
+    <div class="container-x">
+      <div class="mx-auto max-w-xl text-center">
+        <span class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-accent-gradient text-navy-950 shadow-glow animate-fade-up"><Icon name="lucide:check" class="h-10 w-10" /></span>
+        <h1 class="mt-8 text-display-lg">Vielen Dank – Ihre Nachricht ist angekommen.</h1>
+        <p class="mt-4 lead">Wir melden uns in der Regel innerhalb eines Werktags bei Ihnen. Bei dringenden Anliegen erreichen Sie uns direkt:</p>
+        <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+          <a href={site.phone.href} data-place="danke" class="btn-dark"><Icon name="lucide:phone" class="h-4 w-4" /> {site.phone.display}</a>
+          <a href={site.whatsapp.href} data-place="danke" target="_blank" rel="noopener" class="btn-outline"><Icon name="lucide:message-circle" class="h-4 w-4" /> WhatsApp</a>
+        </div>
+        <a href="/" class="btn-ghost mt-10">Zurück zur Startseite <Icon name="lucide:arrow-right" class="h-4 w-4" /></a>
+      </div>
+    </div>
+  </section>
+</Layout>

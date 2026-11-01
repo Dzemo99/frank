@@ -1,0 +1,54 @@
+---
+/** Klassisches Kontaktformular (Netlify Forms, name="kontakt") */
+import { Icon } from 'astro-icon/components';
+---
+
+<form
+  name="kontakt"
+  method="POST"
+  action="/danke"
+  data-netlify="true"
+  netlify-honeypot="bot-field"
+  data-netlify-ajax
+  data-redirect="/danke"
+  class="card p-6 sm:p-8"
+  novalidate
+>
+  <input type="hidden" name="form-name" value="kontakt" />
+  <p class="hidden"><label>Bitte dieses Feld leer lassen: <input name="bot-field" /></label></p>
+
+  <div class="grid gap-4 sm:grid-cols-2">
+    <div data-field="name">
+      <label for="k-name" class="label">Name</label>
+      <input id="k-name" name="name" type="text" class="input" autocomplete="name" required />
+      <p class="field-error">Bitte geben Sie Ihren Namen an.</p>
+    </div>
+    <div data-field="firma">
+      <label for="k-firma" class="label">Firma <span class="font-normal text-navy-500">(optional)</span></label>
+      <input id="k-firma" name="firma" type="text" class="input" autocomplete="organization" />
+    </div>
+    <div data-field="email">
+      <label for="k-email" class="label">E-Mail</label>
+      <input id="k-email" name="email" type="email" class="input" autocomplete="email" required />
+      <p class="field-error">Bitte geben Sie eine gültige E-Mail-Adresse an.</p>
+    </div>
+    <div data-field="telefon">
+      <label for="k-telefon" class="label">Telefon <span class="font-normal text-navy-500">(optional)</span></label>
+      <input id="k-telefon" name="telefon" type="tel" class="input" autocomplete="tel" />
+    </div>
+  </div>
+  <div class="mt-4" data-field="nachricht">
+    <label for="k-nachricht" class="label">Ihre Nachricht</label>
+    <textarea id="k-nachricht" name="nachricht" rows="5" class="input" required minlength="10"></textarea>
+    <p class="field-error">Bitte schreiben Sie uns kurz, worum es geht (mind. 10 Zeichen).</p>
+  </div>
+  <div class="mt-5" data-field="datenschutz">
+    <label class="flex items-start gap-3 text-sm text-navy-700">
+      <input type="checkbox" name="datenschutz" value="ja" class="checkbox" required />
+      <span>Ich habe die <a href="/datenschutz" class="font-semibold text-electric-600 underline underline-offset-2" target="_blank">Datenschutzerklärung</a> gelesen und bin mit der Verarbeitung meiner Angaben zur Beantwortung meiner Anfrage einverstanden.</span>
+    </label>
+    <p class="field-error">Bitte stimmen Sie der Datenschutzerklärung zu.</p>
+  </div>
+  <p class="mt-4 hidden rounded-xl bg-red-50 p-3 text-sm text-red-700" role="alert" data-form-status></p>
+  <button type="submit" class="btn-primary mt-6 w-full sm:w-auto">Nachricht senden <Icon name="lucide:send" class="h-4 w-4" /></button>
+</form>

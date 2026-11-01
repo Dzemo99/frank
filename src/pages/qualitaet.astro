@@ -1,0 +1,81 @@
+---
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import ProcessTimeline from '../components/ProcessTimeline.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import kita from '../assets/images/kita.png';
+import fenster from '../assets/images/fenster.png';
+
+const principles = [
+  { icon: 'lucide:smartphone', title: 'Digitale Kontrollen', text: 'Zeiterfassung im Objekt, Checklisten je Raumgruppe und dokumentierte Qualitätsbegehungen durch die Objektleitung. Sie erhalten auf Wunsch regelmäßige Reports.' },
+  { icon: 'lucide:users', title: 'Festes Personal', text: 'Jedes Objekt hat ein festes Team und eine feste Ansprechperson. Vertretungen kommen aus demselben Team und sind eingewiesen.' },
+  { icon: 'lucide:leaf', title: 'Umweltfreundliche Reinigungsmittel', text: 'Wir setzen auf umweltverträgliche, materialschonende Produkte, exakte Dosiersysteme und Mikrofaser-Technik – weniger Chemie, weniger Wasser.' },
+  { icon: 'lucide:shield-check', title: 'Zuverlässigkeit', text: 'Feste Reinigungszeiten, schriftliche Schlüsselregelung, Erreichbarkeit der Objektleitung und schnelle Reaktion bei Sonderwünschen.' },
+  { icon: 'lucide:clipboard-check', title: 'Leistungsverzeichnis statt Bauchgefühl', text: 'Was, wie oft, in welchem Standard: Alles steht im Leistungsverzeichnis. So sind Angebot und Ergebnis vergleichbar.' },
+  { icon: 'lucide:heart-handshake', title: 'Faire Arbeitsbedingungen', text: 'Pünktliche Bezahlung, Schulungen und gute Ausrüstung – zufriedene Mitarbeitende reinigen besser und bleiben länger in Ihrem Objekt.' },
+];
+---
+
+<Layout
+  title="Qualität & Ablauf – So arbeiten wir"
+  description="Digitale Kontrollen, festes Personal, umweltfreundliche Reinigungsmittel und ein klarer Ablauf von der Anfrage bis zum Start: So sichert die Ideale Gebäudereinigung Qualität in Frankfurt & Rhein-Main."
+  canonical="/qualitaet"
+  ogImage={kita}
+>
+  <Hero
+    compact
+    eyebrow="Qualität & Ablauf"
+    headline="Qualität, die Sie prüfen können"
+    text="Sauberkeit ist kein Zufall, sondern das Ergebnis klarer Prozesse: digitale Kontrollen, feste Teams, definierte Standards – und ein Ablauf, der Sie vom ersten Kontakt an entlastet."
+    image={fenster}
+    imageAlt="Glasreiniger zieht eine Glasfassade streifenfrei ab"
+  />
+
+  <section class="section bg-white">
+    <div class="container-x">
+      <div class="max-w-3xl" data-reveal>
+        <p class="eyebrow">Unsere Arbeitsweise</p>
+        <h2 class="mt-3 text-display-lg">Sechs Prinzipien für konstant gute Ergebnisse</h2>
+      </div>
+      <ul class="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3" data-reveal-group>
+        {principles.map((p) => (
+          <li class="card card-hover p-6">
+            <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-navy-950 text-accent-300"><Icon name={p.icon} class="h-6 w-6" /></span>
+            <h3 class="mt-4 font-bold text-navy-950">{p.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-navy-700">{p.text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section-tight bg-mist-50">
+    <div class="container-x grid items-center gap-10 lg:grid-cols-12">
+      <div class="overflow-hidden rounded-4xl shadow-lift lg:col-span-6" data-reveal>
+        <Image src={kita} alt="Reinigungsteam reinigt einen Gruppenraum mit Scheuersaugmaschine und desinfiziert Tische" width={1000} height={700} format="webp" quality={80} loading="lazy" decoding="async" class="h-full w-full object-cover" />
+      </div>
+      <div class="lg:col-span-6" data-reveal>
+        <p class="eyebrow">Qualitätskreislauf</p>
+        <h2 class="mt-3 text-display-md">Prüfen, dokumentieren, verbessern</h2>
+        <ol class="mt-6 space-y-4">
+          {[
+            ['Einweisung', 'Jedes Teammitglied wird im Objekt auf Leistungsverzeichnis, Materialien und Sicherheitsregeln eingewiesen.'],
+            ['Durchführung nach Checkliste', 'Die digitale Checkliste führt durch jeden Reinigungsgang und wird nach Abschluss bestätigt.'],
+            ['Kontrolle durch Objektleitung', 'Regelmäßige, dokumentierte Begehungen – unangekündigt und gemeinsam mit Ihnen.'],
+            ['Feedback & Nachbesserung', 'Hinweise erreichen uns direkt; Abweichungen werden umgehend behoben und nachverfolgt.'],
+          ].map(([t, d], i) => (
+            <li class="flex gap-4">
+              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-navy-950 text-sm font-bold text-accent-300">{i + 1}</span>
+              <div><p class="font-bold text-navy-950">{t}</p><p class="mt-0.5 text-sm text-navy-700">{d}</p></div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <ProcessTimeline />
+  <CtaBanner />
+</Layout>

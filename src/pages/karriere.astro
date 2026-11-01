@@ -1,0 +1,109 @@
+---
+import { Icon } from 'astro-icon/components';
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import ExpressApplyForm from '../components/ExpressApplyForm.astro';
+import { jobs, benefits } from '../data/jobs';
+import { site, locations } from '../data/site';
+import team from '../assets/images/team-stimmung.png';
+
+const siteUrl = (Astro.site?.toString() ?? site.url).replace(/\/$/, '');
+const frankfurt = locations.find((l) => l.id === 'frankfurt')!;
+const schema = jobs.map((j) => ({
+  '@type': 'JobPosting',
+  title: j.title,
+  description: `${j.summary} Aufgaben: ${j.tasks.join(' ')} Profil: ${j.profile.join(' ')}`,
+  datePosted: '2026-11-01',
+  employmentType: j.id === 'objektleiter' ? 'FULL_TIME' : ['FULL_TIME', 'PART_TIME'],
+  hiringOrganization: { '@type': 'Organization', name: site.name, sameAs: siteUrl },
+  jobLocation: {
+    '@type': 'Place',
+    address: { '@type': 'PostalAddress', addressLocality: frankfurt.city, addressRegion: frankfurt.region, addressCountry: 'DE' },
+  },
+  directApply: true,
+}));
+---
+
+<Layout
+  title="Karriere – Reinigungskräfte & Objektleiter (m/w/d) in Frankfurt"
+  description="Jobs in der Gebäudereinigung in Frankfurt & Rhein-Main: faire Bezahlung, pünktliches Gehalt, gutes Team, moderne Arbeitsgeräte. Express-Bewerbung in 3 Klicks – ohne Anschreiben."
+  canonical="/karriere"
+  ogImage={team}
+  schema={schema}
+>
+  <Hero
+    compact
+    eyebrow="Karriere bei der Ideale Gebäudereinigung"
+    headline="Arbeiten, wo Leistung gesehen wird"
+    text="Wir suchen Reinigungskräfte und Objektleiter (m/w/d) für Frankfurt und die Region. Faire Bezahlung, pünktliches Gehalt, feste Objekte und ein Team, das zusammenhält."
+    primaryHref="#bewerbung"
+    primaryLabel="Jetzt in 3 Klicks bewerben"
+    image={team}
+    imageAlt="Reinigungsteam in schwarzer Arbeitskleidung vor einem Bürogebäude"
+  />
+
+  <section class="section bg-white">
+    <div class="container-x">
+      <div class="max-w-3xl" data-reveal>
+        <p class="eyebrow">Was Sie erwartet</p>
+        <h2 class="mt-3 text-display-lg">Gute Arbeit verdient gute Bedingungen</h2>
+      </div>
+      <ul class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3" data-reveal-group>
+        {benefits.map((b) => (
+          <li class="card card-hover p-6">
+            <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-50 text-electric-600"><Icon name={b.icon} class="h-6 w-6" /></span>
+            <h3 class="mt-4 font-bold text-navy-950">{b.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-navy-700">{b.text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section bg-mist-50" id="stellen">
+    <div class="container-x grid gap-12 lg:grid-cols-12 lg:items-start">
+      <div class="space-y-6 lg:col-span-7">
+        <div data-reveal>
+          <p class="eyebrow">Offene Stellen</p>
+          <h2 class="mt-3 text-display-md">Aktuell gesucht in Frankfurt & Region</h2>
+        </div>
+        {jobs.map((j) => (
+          <article class="card p-6 sm:p-8" data-reveal id={j.id}>
+            <div class="flex flex-wrap items-start justify-between gap-4">
+              <div class="flex items-start gap-4">
+                <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-navy-950 text-accent-300"><Icon name={j.icon} class="h-6 w-6" /></span>
+                <div>
+                  <h3 class="text-xl font-bold text-navy-950">{j.title}</h3>
+                  <p class="mt-1 text-sm text-navy-600">{j.type} · {j.location}</p>
+                </div>
+              </div>
+              <a href="#bewerbung" class="btn-dark btn-sm">Bewerben</a>
+            </div>
+            <p class="mt-5 text-navy-700">{j.summary}</p>
+            <div class="mt-6 grid gap-6 sm:grid-cols-2">
+              <div>
+                <h4 class="text-sm font-bold uppercase tracking-wider text-navy-500">Ihre Aufgaben</h4>
+                <ul class="mt-3 space-y-2 text-sm text-navy-800">
+                  {j.tasks.map((t) => <li class="flex gap-2"><Icon name="lucide:check" class="mt-0.5 h-4 w-4 shrink-0 text-electric-600" />{t}</li>)}
+                </ul>
+              </div>
+              <div>
+                <h4 class="text-sm font-bold uppercase tracking-wider text-navy-500">Ihr Profil</h4>
+                <ul class="mt-3 space-y-2 text-sm text-navy-800">
+                  {j.profile.map((t) => <li class="flex gap-2"><Icon name="lucide:check" class="mt-0.5 h-4 w-4 shrink-0 text-electric-600" />{t}</li>)}
+                </ul>
+              </div>
+            </div>
+          </article>
+        ))}
+        <p class="text-sm text-navy-600" data-reveal="fade">
+          Lieber anrufen? <a href={site.phone.href} data-place="karriere" class="font-semibold text-navy-900 underline underline-offset-2">{site.phone.display}</a> oder per
+          <a href={site.whatsapp.href} data-place="karriere" target="_blank" rel="noopener" class="font-semibold text-navy-900 underline underline-offset-2">WhatsApp</a>.
+        </p>
+      </div>
+      <div class="lg:sticky lg:top-24 lg:col-span-5" data-reveal>
+        <ExpressApplyForm />
+      </div>
+    </div>
+  </section>
+</Layout>

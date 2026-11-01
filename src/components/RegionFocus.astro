@@ -1,0 +1,46 @@
+---
+import { Icon } from 'astro-icon/components';
+import SectionHeading from './SectionHeading.astro';
+import ServiceAreaMap from './ServiceAreaMap.astro';
+import { serviceAreas, frankfurtDistricts, locations } from '../data/site';
+const frankfurt = locations.find((l) => l.id === 'frankfurt')!;
+const marquee = [...serviceAreas, ...serviceAreas];
+---
+
+<section class="section bg-navy-950 text-white" id="region">
+  <div class="container-x grid items-center gap-12 lg:grid-cols-12">
+    <div class="lg:col-span-6">
+      <SectionHeading
+        light
+        eyebrow="Frankfurt-Fokus"
+        title="Vor Ort in Frankfurt. Schnell im gesamten Rhein-Main-Gebiet."
+        text="Unsere Niederlassung in Frankfurt am Main steuert Besichtigungen, Einsätze und Qualitätskontrollen in der Region – vom Bankenviertel bis zu den Gewerbeparks in Eschborn, Offenbach und Bad Homburg."
+      />
+      <div class="mt-8 grid gap-4 sm:grid-cols-2" data-reveal-group>
+        <div class="glass-dark rounded-2xl p-5">
+          <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-accent-500/20 text-accent-300"><Icon name="lucide:map-pin" class="h-5 w-5" /></span>
+          <p class="mt-3 font-bold">{frankfurt.label}</p>
+          <p class="mt-1 text-sm text-white/65">{frankfurt.role}</p>
+        </div>
+        <div class="glass-dark rounded-2xl p-5">
+          <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-accent-500/20 text-accent-300"><Icon name="lucide:landmark" class="h-5 w-5" /></span>
+          <p class="mt-3 font-bold">Objekttypen in der Region</p>
+          <p class="mt-1 text-sm text-white/65">Bankenviertel, Gewerbeparks, Praxis- und Bürokomplexe, Industrie- und Logistikflächen.</p>
+        </div>
+      </div>
+      <ul class="mt-6 flex flex-wrap gap-2" data-reveal="fade">
+        {frankfurtDistricts.map((d) => <li class="chip-dark">{d}</li>)}
+      </ul>
+    </div>
+    <div class="lg:col-span-6" data-reveal>
+      <ServiceAreaMap />
+    </div>
+  </div>
+
+  <!-- Städte-Laufband -->
+  <div class="mask-fade-x mt-16 overflow-hidden border-y border-white/10 py-4" aria-hidden="true">
+    <div class="flex w-max animate-marquee gap-10 whitespace-nowrap text-sm font-semibold uppercase tracking-[0.2em] text-white/50">
+      {marquee.map((c) => <span class="inline-flex items-center gap-10"><span>{c}</span><span class="h-1 w-1 rounded-full bg-accent-400"></span></span>)}
+    </div>
+  </div>
+</section>

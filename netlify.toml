@@ -1,0 +1,72 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# ---------------------------------------------------------------------------
+# Sicherheits-Header + Content-Security-Policy
+#   script-src : eigene Skripte (Astro-Bundles, /js/consent.js, /js/config.js)
+#                + Google Tag Manager / gtag.js / Ads-Conversion
+#   style-src  : 'unsafe-inline' nötig – Astro bettet Critical CSS als <style> ein,
+#                GSAP setzt Inline-Styles (transform/opacity)
+#   connect-src: Netlify Forms (POST an eigene Domain) + Google-Pings
+#   frame-src  : Google Maps (nur nach Klick/Einwilligung) + GTM-Preview
+# ---------------------------------------------------------------------------
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=(), payment=(), interest-cohort=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+    Content-Security-Policy = """
+      default-src 'self';
+      base-uri 'self';
+      form-action 'self';
+      frame-ancestors 'self';
+      object-src 'none';
+      script-src 'self' https://www.googletagmanager.com https://www.googleadservices.com https://www.google-analytics.com https://googleads.g.doubleclick.net;
+      style-src 'self' 'unsafe-inline';
+      img-src 'self' data: blob: https://www.googletagmanager.com https://www.googleadservices.com https://www.google-analytics.com https://www.google.com https://www.google.de https://googleads.g.doubleclick.net https://stats.g.doubleclick.net;
+      font-src 'self' data:;
+      connect-src 'self' https://www.googletagmanager.com https://www.googleadservices.com https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com https://stats.g.doubleclick.net https://www.google.com https://www.google.de https://googleads.g.doubleclick.net https://ad.doubleclick.net https://pagead2.googlesyndication.com;
+      frame-src https://www.google.com https://maps.google.com https://td.doubleclick.net https://www.googletagmanager.com https://www.googleadservices.com;
+      upgrade-insecure-requests;
+    """
+
+# Gehashte Astro-Assets (CSS/JS/Bilder in /_astro) dürfen ewig gecacht werden
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Danke-Seite nicht indexieren
+[[headers]]
+  for = "/danke"
+  [headers.values]
+    X-Robots-Tag = "noindex"
+
+# Alte .html-Aufrufe sauber umleiten (Astro baut /name.html, Netlify liefert /name)
+[[redirects]]
+  from = "/index.html"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/*.html"
+  to = "/:splat"
+  status = 301
+  force = false

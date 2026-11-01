@@ -1,0 +1,67 @@
+---
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import SectionHeading from './SectionHeading.astro';
+import { services } from '../data/services';
+
+interface Props {
+  heading?: boolean;
+  /** Aktuelle Leistung ausblenden (auf Landingpages) */
+  exclude?: string;
+  compact?: boolean;
+}
+const { heading = true, exclude, compact = false } = Astro.props;
+const list = services.filter((s) => s.slug !== exclude);
+---
+
+<section class:list={[compact ? 'section-tight' : 'section', 'bg-mist-50']} id="leistungen">
+  <div class="container-x">
+    {heading && (
+      <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <SectionHeading
+          eyebrow="Unsere Leistungen"
+          title="Fünf Kernleistungen – ein Ansprechpartner für Ihr Objekt"
+          text="Vom täglichen Büro-Service bis zur Fassade in 40 Metern Höhe: Wir decken die gewerbliche Gebäudereinigung in Frankfurt und Rhein-Main komplett ab."
+        />
+        <a href="/leistungen" class="btn-ghost shrink-0" data-reveal="fade">
+          Alle Leistungen im Detail <Icon name="lucide:arrow-right" class="h-4 w-4" />
+        </a>
+      </div>
+    )}
+
+    <div class:list={['grid gap-5 sm:grid-cols-2 lg:grid-cols-3', heading && 'mt-12']} data-reveal-group>
+      {list.map((s, i) => (
+        <a
+          href={`/leistungen/${s.slug}`}
+          class:list={['card card-hover group relative flex flex-col overflow-hidden', i === 0 && !exclude && 'sm:col-span-2 lg:col-span-1']}
+        >
+          <div class="relative aspect-[16/10] overflow-hidden">
+            <Image
+              src={s.image}
+              alt={s.imageAlt}
+              width={720}
+              height={450}
+              format="webp"
+              quality={78}
+              loading="lazy"
+              decoding="async"
+              class="h-full w-full object-cover transition-transform duration-700 ease-spring group-hover:scale-105"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-navy-950/60 via-transparent to-transparent"></div>
+            <span class="absolute left-4 top-4 flex h-11 w-11 items-center justify-center rounded-xl bg-white/90 text-navy-900 shadow-soft backdrop-blur">
+              <Icon name={s.icon} class="h-5 w-5" />
+            </span>
+          </div>
+          <div class="flex flex-1 flex-col p-6">
+            <h3 class="text-lg font-bold text-navy-950">{s.name}</h3>
+            <p class="mt-2 flex-1 text-sm leading-relaxed text-navy-700">{s.teaser}</p>
+            <span class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-electric-600">
+              Mehr erfahren
+              <Icon name="lucide:arrow-right" class="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

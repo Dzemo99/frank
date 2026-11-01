@@ -1,0 +1,86 @@
+---
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import SectionHeading from './SectionHeading.astro';
+import bild from '../assets/images/treppenhaus.png';
+
+const points = [
+  {
+    icon: 'lucide:search-check',
+    title: 'Qualitätsmanagement mit System',
+    text: 'Objektleitung, feste Kontrollrhythmen und definierte Standards je Raumgruppe. Abweichungen werden dokumentiert und sofort behoben.',
+  },
+  {
+    icon: 'lucide:smartphone',
+    title: 'Digitale Zeiterfassung',
+    text: 'Kommen und Gehen werden digital im Objekt erfasst. Sie wissen jederzeit, wann wer bei Ihnen gereinigt hat – transparent und nachvollziehbar.',
+  },
+  {
+    icon: 'lucide:clipboard-check',
+    title: 'Qualitäts-Checklisten',
+    text: 'Jede Reinigung folgt einer digitalen Checkliste auf Basis Ihres Leistungsverzeichnisses. Nichts wird vergessen, alles ist belegbar.',
+  },
+  {
+    icon: 'lucide:users',
+    title: 'Festes Personal',
+    text: 'Eingewiesene Stammkräfte statt wechselnder Aushilfen. Ihr Team kennt Ihr Gebäude, Ihre Regeln und Ihre Ansprechpersonen.',
+  },
+];
+---
+
+<section class="section relative overflow-hidden bg-white" id="qualitaet">
+  <div class="absolute inset-0 -z-10 bg-grid-light bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_at_center,#000_30%,transparent_75%)]"></div>
+  <div class="container-x grid items-center gap-12 lg:grid-cols-12">
+    <div class="lg:col-span-6">
+      <SectionHeading
+        eyebrow="Qualität & Technik"
+        title="Warum Unternehmen in Frankfurt mit uns reinigen"
+        text="Sauberkeit ist messbar. Deshalb arbeiten wir mit Prozessen, die Sie prüfen können – nicht mit Versprechen."
+      />
+      <ul class="mt-10 grid gap-6 sm:grid-cols-2" data-reveal-group>
+        {points.map((p) => (
+          <li class="group">
+            <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-navy-900 text-accent-300 shadow-soft transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-105">
+              <Icon name={p.icon} class="h-6 w-6" />
+            </span>
+            <h3 class="mt-4 text-base font-bold text-navy-950">{p.title}</h3>
+            <p class="mt-1.5 text-sm leading-relaxed text-navy-700">{p.text}</p>
+          </li>
+        ))}
+      </ul>
+      <a href="/qualitaet" class="btn-dark mt-10" data-reveal="fade">
+        So läuft die Zusammenarbeit ab <Icon name="lucide:arrow-right" class="h-4 w-4" />
+      </a>
+    </div>
+
+    <div class="relative lg:col-span-6" data-reveal>
+      <div class="relative overflow-hidden rounded-4xl shadow-lift" data-parallax-container>
+        <div data-parallax="8">
+          <Image
+            src={bild}
+            alt="Reinigungskraft wischt ein helles Treppenhaus mit Flachmopp, Reinigungswagen mit Eimersystem im Hintergrund"
+            width={900}
+            height={640}
+            format="webp"
+            quality={80}
+            loading="lazy"
+            decoding="async"
+            class="h-full w-full scale-110 object-cover"
+          />
+        </div>
+      </div>
+      <!-- Schwebende Info-Karte -->
+      <div class="glass absolute -bottom-6 left-4 right-4 rounded-2xl p-4 sm:left-auto sm:right-8 sm:w-72">
+        <div class="flex items-start gap-3">
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent-gradient text-navy-950">
+            <Icon name="lucide:check-circle-2" class="h-5 w-5" />
+          </span>
+          <div>
+            <p class="text-sm font-bold text-navy-950">Reinigung dokumentiert</p>
+            <p class="mt-0.5 text-xs text-navy-700">Checkliste abgeschlossen, Zeit erfasst, Objektleitung informiert.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

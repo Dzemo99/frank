@@ -1,0 +1,69 @@
+---
+import { Icon } from 'astro-icon/components';
+import Layout from '../layouts/Layout.astro';
+import ContactForm from '../components/ContactForm.astro';
+import LocationCards from '../components/LocationCards.astro';
+import { site, ctaLabel } from '../data/site';
+---
+
+<Layout
+  title="Kontakt – Gebäudereinigung Frankfurt & Rhein-Main"
+  description="Kontakt zur Ideale Gebäudereinigung: Telefon 0551 50316976, WhatsApp, E-Mail oder Kontaktformular. Niederlassung Frankfurt am Main, Verwaltung Göttingen."
+  canonical="/kontakt"
+>
+  <section class="relative overflow-hidden bg-navy-950 pb-20 pt-14 text-white lg:pt-20">
+    <div class="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-accent-500/15 blur-3xl"></div>
+    <div class="container-x grid gap-10 lg:grid-cols-12 lg:items-end">
+      <div class="lg:col-span-7">
+        <p class="eyebrow eyebrow-light" data-hero-item>Kontakt</p>
+        <h1 class="mt-4 text-display-lg text-white" data-hero-item>Sprechen wir über Ihr Objekt</h1>
+        <p class="mt-4 text-lg text-white/75" data-hero-item>Telefon, WhatsApp, E-Mail oder Formular – wählen Sie den Weg, der für Sie am schnellsten ist. Für Angebote nutzen Sie am besten unsere <a href="/#anfrage" class="font-semibold text-accent-300 underline underline-offset-2">60-Sekunden-Anfrage</a>.</p>
+      </div>
+      <div class="grid gap-3 sm:grid-cols-3 lg:col-span-5" data-hero-item>
+        <a href={site.phone.href} data-place="kontakt-hero" class="glass-dark rounded-2xl p-4 transition hover:bg-white/10">
+          <Icon name="lucide:phone" class="h-5 w-5 text-accent-300" />
+          <p class="mt-3 text-xs text-white/60">Anrufen</p>
+          <p class="text-sm font-bold">{site.phone.display}</p>
+        </a>
+        <a href={site.whatsapp.href} data-place="kontakt-hero" target="_blank" rel="noopener" class="glass-dark rounded-2xl p-4 transition hover:bg-white/10">
+          <Icon name="lucide:message-circle" class="h-5 w-5 text-accent-300" />
+          <p class="mt-3 text-xs text-white/60">WhatsApp</p>
+          <p class="text-sm font-bold">Chat starten</p>
+        </a>
+        <a href={`mailto:${site.email}`} class="glass-dark rounded-2xl p-4 transition hover:bg-white/10">
+          <Icon name="lucide:mail" class="h-5 w-5 text-accent-300" />
+          <p class="mt-3 text-xs text-white/60">E-Mail</p>
+          <p class="break-all text-sm font-bold">{site.email}</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-mist-50">
+    <div class="container-x grid gap-10 lg:grid-cols-12 lg:items-start">
+      <div class="lg:col-span-7" data-reveal>
+        <h2 class="text-display-md">Nachricht schreiben</h2>
+        <p class="mt-2 text-navy-700">Wir antworten in der Regel innerhalb eines Werktags.</p>
+        <div class="mt-6"><ContactForm /></div>
+      </div>
+      <aside class="lg:col-span-5" data-reveal>
+        <div class="rounded-4xl bg-navy-950 p-6 text-white">
+          <p class="eyebrow eyebrow-light">Schneller zum Angebot</p>
+          <h2 class="mt-3 text-xl font-bold text-white">Angebot statt Nachricht?</h2>
+          <p class="mt-2 text-sm text-white/70">Mit der Schnellanfrage geben Sie Leistung und Fläche direkt an – so können wir Ihnen sofort einen Besichtigungstermin vorschlagen.</p>
+          <a href="/#anfrage" class="btn-primary mt-5 w-full">{ctaLabel} <Icon name="lucide:arrow-right" class="h-4 w-4" /></a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section bg-white">
+    <div class="container-x">
+      <div class="max-w-3xl" data-reveal>
+        <p class="eyebrow">Standorte</p>
+        <h2 class="mt-3 text-display-md">Niederlassung Frankfurt · Verwaltung Göttingen</h2>
+      </div>
+      <div class="mt-10"><LocationCards /></div>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,62 @@
+---
+/**
+ * Einsatzgebiet-Visualisierung – reines SVG, kein externer Kartendienst,
+ * keine Einwilligung nötig. Positionen sind schematisch (nicht maßstabsgetreu).
+ */
+const cities = [
+  { name: 'Frankfurt am Main', x: 50, y: 50, main: true },
+  { name: 'Offenbach', x: 63, y: 56 },
+  { name: 'Eschborn', x: 38, y: 40 },
+  { name: 'Bad Homburg', x: 44, y: 22 },
+  { name: 'Oberursel', x: 36, y: 28 },
+  { name: 'Neu-Isenburg', x: 52, y: 68 },
+  { name: 'Hanau', x: 80, y: 52 },
+  { name: 'Darmstadt', x: 56, y: 90 },
+  { name: 'Wiesbaden', x: 12, y: 50 },
+  { name: 'Mainz', x: 14, y: 62 },
+  { name: 'Hofheim', x: 28, y: 50 },
+  { name: 'Rüsselsheim', x: 30, y: 70 },
+];
+---
+
+<div class="relative overflow-hidden rounded-4xl border border-white/10 bg-navy-900/60 p-4 shadow-glass">
+  <svg viewBox="0 0 100 100" class="h-auto w-full" role="img" aria-label="Schematische Karte des Einsatzgebiets Rhein-Main mit Frankfurt am Main im Zentrum">
+    <defs>
+      <radialGradient id="pulse" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.35" />
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0" />
+      </radialGradient>
+    </defs>
+    <!-- Radien -->
+    <circle cx="50" cy="50" r="46" fill="url(#pulse)" />
+    {[14, 26, 38].map((r) => (
+      <circle cx="50" cy="50" r={r} fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="0.4" stroke-dasharray="1.5 1.5" />
+    ))}
+    <!-- Main (stilisiert) -->
+    <path d="M0 58 C 20 56, 35 60, 50 54 S 80 48, 100 52" fill="none" stroke="rgba(103,232,249,0.35)" stroke-width="1.2" stroke-linecap="round" />
+    <!-- Verbindungen -->
+    {cities.filter((c) => !c.main).map((c) => (
+      <line x1="50" y1="50" x2={c.x} y2={c.y} stroke="rgba(255,255,255,0.08)" stroke-width="0.4" />
+    ))}
+    <!-- Städte -->
+    {cities.map((c) => (
+      <g>
+        {c.main ? (
+          <>
+            <circle cx={c.x} cy={c.y} r="4.5" fill="#22d3ee" opacity="0.25">
+              <animate attributeName="r" values="3;7;3" dur="3s" repeatCount="indefinite" />
+            </circle>
+            <circle cx={c.x} cy={c.y} r="2.4" fill="#22d3ee" />
+            <text x={c.x} y={c.y - 5} text-anchor="middle" font-size="3.4" font-weight="700" fill="#ffffff" font-family="Manrope Variable, Inter Variable, sans-serif">{c.name}</text>
+          </>
+        ) : (
+          <>
+            <circle cx={c.x} cy={c.y} r="1.3" fill="#ffffff" opacity="0.9" />
+            <text x={c.x} y={c.y + 4.2} text-anchor="middle" font-size="2.6" fill="rgba(255,255,255,0.75)" font-family="Inter Variable, sans-serif">{c.name}</text>
+          </>
+        )}
+      </g>
+    ))}
+  </svg>
+  <p class="mt-2 text-center text-[11px] text-white/40">Schematische Darstellung · Einsätze im gesamten Rhein-Main-Gebiet</p>
+</div>

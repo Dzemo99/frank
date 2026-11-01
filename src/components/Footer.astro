@@ -1,0 +1,101 @@
+---
+import { Icon } from 'astro-icon/components';
+import Logo from './Logo.astro';
+import { site, locations, serviceAreas } from '../data/site';
+import { services } from '../data/services';
+const year = new Date().getFullYear();
+---
+
+<footer class="relative mt-auto overflow-hidden bg-navy-950 text-white">
+  <div class="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-accent-500/10 blur-3xl"></div>
+  <div class="container-x relative py-16 lg:py-20">
+    <div class="grid gap-12 lg:grid-cols-12">
+      <!-- Marke + Schnellkontakt -->
+      <div class="lg:col-span-4">
+        <Logo variant="light" />
+        <p class="mt-5 max-w-sm text-sm leading-relaxed text-white/70">
+          Gewerbliche Gebäudereinigung für Frankfurt am Main und das Rhein-Main-Gebiet. Festes Personal, digitale
+          Qualitätskontrolle, klare Leistungsverzeichnisse.
+        </p>
+        <ul class="mt-6 space-y-3 text-sm">
+          <li>
+            <a href={site.phone.href} data-place="footer" class="group inline-flex items-center gap-3 hover:text-accent-300">
+              <span class="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 group-hover:bg-accent-500/20">
+                <Icon name="lucide:phone" class="h-4 w-4" />
+              </span>
+              <span><span class="block text-xs text-white/50">Telefon</span>{site.phone.display}</span>
+            </a>
+          </li>
+          <li>
+            <a href={site.whatsapp.href} data-place="footer" target="_blank" rel="noopener" class="group inline-flex items-center gap-3 hover:text-accent-300">
+              <span class="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 group-hover:bg-accent-500/20">
+                <Icon name="lucide:message-circle" class="h-4 w-4" />
+              </span>
+              <span><span class="block text-xs text-white/50">WhatsApp</span>{site.whatsapp.display}</span>
+            </a>
+          </li>
+          <li>
+            <a href={`mailto:${site.email}`} class="group inline-flex items-center gap-3 hover:text-accent-300">
+              <span class="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 group-hover:bg-accent-500/20">
+                <Icon name="lucide:mail" class="h-4 w-4" />
+              </span>
+              <span><span class="block text-xs text-white/50">E-Mail</span>{site.email}</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Leistungen -->
+      <div class="lg:col-span-3">
+        <h3 class="text-sm font-semibold uppercase tracking-wider text-white/50">Leistungen</h3>
+        <ul class="mt-4 space-y-2.5 text-sm">
+          {services.map((s) => (
+            <li><a href={`/leistungen/${s.slug}`} class="text-white/85 transition-colors hover:text-accent-300">{s.name}</a></li>
+          ))}
+          <li><a href="/leistungen" class="inline-flex items-center gap-1 font-semibold text-accent-300">Alle Leistungen <Icon name="lucide:arrow-right" class="h-3.5 w-3.5" /></a></li>
+        </ul>
+      </div>
+
+      <!-- Unternehmen -->
+      <div class="lg:col-span-2">
+        <h3 class="text-sm font-semibold uppercase tracking-wider text-white/50">Unternehmen</h3>
+        <ul class="mt-4 space-y-2.5 text-sm">
+          <li><a href="/qualitaet" class="text-white/85 hover:text-accent-300">Qualität & Ablauf</a></li>
+          <li><a href="/ueber-uns" class="text-white/85 hover:text-accent-300">Über uns</a></li>
+          <li><a href="/karriere" class="text-white/85 hover:text-accent-300">Karriere</a></li>
+          <li><a href="/kontakt" class="text-white/85 hover:text-accent-300">Kontakt</a></li>
+          <li><a href="/#anfrage" class="text-white/85 hover:text-accent-300">Angebot anfragen</a></li>
+        </ul>
+        <h3 class="mt-8 text-sm font-semibold uppercase tracking-wider text-white/50">Standorte</h3>
+        <ul class="mt-4 space-y-3 text-sm text-white/85">
+          {locations.map((l) => (
+            <li>
+              <span class="block font-semibold text-white">{l.label}</span>
+              <span class="block text-white/60">{l.city}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Einsatzgebiete -->
+      <div class="lg:col-span-3">
+        <h3 class="text-sm font-semibold uppercase tracking-wider text-white/50">Einsatzgebiete</h3>
+        <ul class="mt-4 flex flex-wrap gap-2">
+          {serviceAreas.map((city) => (
+            <li class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">{city}</li>
+          ))}
+        </ul>
+        <p class="mt-4 text-xs text-white/50">… und das gesamte Rhein-Main-Gebiet. Ihr Ort ist nicht dabei? Fragen Sie einfach an.</p>
+      </div>
+    </div>
+
+    <div class="mt-14 flex flex-col gap-4 border-t border-white/10 pt-6 text-xs text-white/55 md:flex-row md:items-center md:justify-between">
+      <p>© {year} {site.name}. Alle Rechte vorbehalten.</p>
+      <ul class="flex flex-wrap gap-x-5 gap-y-2">
+        <li><a href="/impressum" class="hover:text-white">Impressum</a></li>
+        <li><a href="/datenschutz" class="hover:text-white">Datenschutz</a></li>
+        <li><a href="#" data-consent-reset class="inline-flex items-center gap-1 hover:text-white"><Icon name="lucide:cookie" class="h-3.5 w-3.5" /> Cookie-Einstellungen</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>

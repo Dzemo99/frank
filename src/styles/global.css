@@ -1,0 +1,339 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   BASIS
+   ========================================================================== */
+@layer base {
+  :root {
+    --header-h: 4.5rem;
+    color-scheme: light;
+  }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--header-h) + 1rem);
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-white font-sans text-navy-800 antialiased;
+    font-feature-settings: 'cv11', 'ss01', 'liga';
+  }
+  h1, h2, h3, h4 {
+    @apply font-display text-navy-950;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  ::selection {
+    @apply bg-accent-400/40 text-navy-950;
+  }
+  :focus-visible {
+    @apply outline-none ring-2 ring-accent-500 ring-offset-2 ring-offset-white;
+  }
+  /* Elemente mit data-reveal werden erst durch GSAP eingeblendet – aber nur,
+     wenn JS aktiv ist (Klasse "js" setzt /js/config.js im <head>). */
+  html.js [data-reveal] {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  html.js [data-reveal='fade'] {
+    transform: none;
+  }
+  html.js [data-reveal-group] > * {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    html.js [data-reveal],
+    html.js [data-reveal-group] > * {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    *, ::before, ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ==========================================================================
+   KOMPONENTEN
+   ========================================================================== */
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+  .section {
+    @apply py-16 sm:py-20 lg:py-28;
+  }
+  .section-tight {
+    @apply py-12 sm:py-16 lg:py-20;
+  }
+
+  /* Überschriften & Eyebrow */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-accent-700;
+  }
+  .eyebrow::before {
+    content: '';
+    @apply h-px w-6 bg-accent-500;
+  }
+  .eyebrow-light {
+    @apply text-accent-300;
+  }
+  .eyebrow-light::before {
+    @apply bg-accent-400;
+  }
+  .lead {
+    @apply text-lg leading-relaxed text-navy-700 sm:text-xl;
+  }
+
+  /* Buttons */
+  .btn {
+    @apply relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full px-6 py-3.5 text-sm font-semibold transition-all duration-300 ease-spring will-change-transform;
+  }
+  .btn:active {
+    transform: translateY(1px) scale(0.99);
+  }
+  .btn-primary {
+    @apply btn bg-accent-gradient text-navy-950 shadow-glow hover:-translate-y-0.5 hover:shadow-lift;
+  }
+  .btn-primary::after {
+    content: '';
+    @apply pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-white/40 opacity-0;
+    transform: translateX(-150%) skewX(-20deg);
+  }
+  .btn-primary:hover::after {
+    @apply opacity-100 animate-shimmer;
+  }
+  .btn-dark {
+    @apply btn bg-navy-900 text-white hover:-translate-y-0.5 hover:bg-navy-800 hover:shadow-lift;
+  }
+  .btn-outline {
+    @apply btn border border-navy-200 bg-white/80 text-navy-900 backdrop-blur hover:-translate-y-0.5 hover:border-navy-300 hover:bg-white hover:shadow-soft;
+  }
+  .btn-outline-light {
+    @apply btn border border-white/25 bg-white/5 text-white backdrop-blur hover:-translate-y-0.5 hover:bg-white/10;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center gap-1.5 text-sm font-semibold text-navy-900 transition-colors hover:text-electric-600;
+  }
+  .btn-sm {
+    @apply px-4 py-2.5 text-sm;
+  }
+  .btn-lg {
+    @apply px-8 py-4 text-base;
+  }
+
+  /* Karten */
+  .card {
+    @apply rounded-3xl border border-navy-100 bg-white shadow-soft transition-all duration-300 ease-spring;
+  }
+  .card-hover {
+    @apply hover:-translate-y-1 hover:border-accent-200 hover:shadow-lift;
+  }
+  .glass {
+    @apply border border-white/60 bg-white/70 shadow-glass backdrop-blur-xl;
+  }
+  .glass-dark {
+    @apply border border-white/10 bg-navy-950/60 backdrop-blur-xl;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-navy-100 bg-white px-3 py-1.5 text-xs font-medium text-navy-800;
+  }
+  .chip-dark {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/90 backdrop-blur;
+  }
+
+  /* Formulare */
+  .label {
+    @apply mb-1.5 block text-sm font-semibold text-navy-900;
+  }
+  .input {
+    @apply w-full rounded-xl border border-navy-200 bg-white px-4 py-3 text-base text-navy-900 placeholder:text-navy-400 transition-all duration-200 focus:border-accent-500 focus:ring-4 focus:ring-accent-500/15 focus:outline-none;
+  }
+  .input[aria-invalid='true'] {
+    @apply border-red-400 ring-4 ring-red-500/10;
+  }
+  .field-error {
+    @apply mt-1.5 hidden text-sm text-red-600;
+  }
+  .field-error.is-visible {
+    @apply block;
+  }
+  .checkbox {
+    @apply mt-1 h-5 w-5 shrink-0 rounded border-navy-300 text-electric-600 focus:ring-accent-500;
+  }
+  /* Auswahl-Karten (Radio) */
+  .choice {
+    @apply relative flex cursor-pointer items-center gap-3 rounded-2xl border border-navy-200 bg-white p-4 transition-all duration-200 ease-spring hover:border-accent-300 hover:shadow-soft;
+  }
+  .choice:has(input:checked) {
+    @apply border-electric-500 bg-accent-50/60 shadow-glow;
+  }
+  .choice:has(input:focus-visible) {
+    @apply ring-2 ring-accent-500 ring-offset-2;
+  }
+  .choice input {
+    @apply sr-only;
+  }
+  .choice-icon {
+    @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-navy-50 text-navy-700 transition-colors;
+  }
+  .choice:has(input:checked) .choice-icon {
+    @apply bg-electric-500 text-white;
+  }
+
+  /* Prose für Rechtstexte */
+  .prose-legal {
+    @apply max-w-3xl text-navy-800;
+  }
+  .prose-legal h2 {
+    @apply mb-3 mt-10 text-xl font-bold;
+  }
+  .prose-legal h3 {
+    @apply mb-2 mt-6 text-lg font-semibold;
+  }
+  .prose-legal p, .prose-legal li {
+    @apply mb-3 leading-relaxed;
+  }
+  .prose-legal ul {
+    @apply mb-4 list-disc pl-5;
+  }
+  .prose-legal a {
+    @apply font-semibold text-electric-600 underline underline-offset-2;
+  }
+  .todo {
+    @apply rounded-md bg-amber-100 px-1.5 py-0.5 font-mono text-[0.85em] text-amber-900;
+  }
+
+  /* ---------------------------------------------------------------------
+     Cookie-Banner – Klassennamen entsprechen 1:1 dem bestehenden consent.js
+     --------------------------------------------------------------------- */
+  .consent-banner {
+    @apply fixed inset-x-0 bottom-0 z-[80] border-t border-navy-100 bg-white/95 p-4 shadow-[0_-8px_24px_-12px_rgba(10,18,38,0.3)] backdrop-blur-xl animate-fade-up;
+  }
+  .consent-inner {
+    @apply mx-auto flex max-w-6xl flex-col gap-4 lg:flex-row lg:items-center lg:justify-between;
+  }
+  .consent-text strong {
+    @apply font-display text-base font-bold text-navy-950;
+  }
+  .consent-text p {
+    @apply mt-1 text-sm leading-relaxed text-navy-700;
+  }
+  .consent-text a {
+    @apply font-semibold text-electric-600 underline underline-offset-2;
+  }
+  .consent-buttons {
+    @apply flex shrink-0 flex-col gap-2 sm:flex-row;
+  }
+  /* consent.js nutzt bereits .btn-primary – hier nur kompaktere Größe */
+  .consent-buttons .btn-primary {
+    @apply px-4 py-2.5 text-sm;
+  }
+  .consent-buttons .btn-secondary {
+    @apply btn-outline px-4 py-2.5 text-sm;
+  }
+}
+
+/* ==========================================================================
+   UTILITIES
+   ========================================================================== */
+@layer utilities {
+  .text-gradient {
+    @apply bg-accent-gradient bg-clip-text text-transparent;
+  }
+  .mask-fade-x {
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  }
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .word-reveal {
+    @apply inline-block overflow-hidden align-bottom;
+  }
+  .word-reveal > span {
+    @apply inline-block will-change-transform;
+  }
+}
+
+/* ==========================================================================
+   Vorher/Nachher-Slider
+   ========================================================================== */
+.ba {
+  --pos: 50%;
+  @apply relative select-none overflow-hidden rounded-3xl bg-navy-100;
+  touch-action: pan-y;
+}
+.ba img {
+  @apply pointer-events-none block h-full w-full object-cover;
+}
+.ba-after {
+  @apply absolute inset-0;
+}
+.ba-before {
+  @apply absolute inset-0;
+  clip-path: inset(0 calc(100% - var(--pos)) 0 0);
+}
+.ba-handle {
+  @apply pointer-events-none absolute inset-y-0 z-10 w-0.5 -translate-x-1/2 bg-white shadow-[0_0_0_1px_rgba(10,18,38,0.15)];
+  left: var(--pos);
+}
+.ba-handle > span {
+  @apply absolute left-1/2 top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white text-navy-900 shadow-lift ring-1 ring-navy-100;
+}
+.ba-range {
+  @apply absolute inset-0 z-20 h-full w-full cursor-ew-resize appearance-none bg-transparent opacity-0;
+  margin: 0;
+}
+.ba-label {
+  @apply pointer-events-none absolute top-3 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider backdrop-blur;
+}
+
+/* ==========================================================================
+   FAQ-Accordion (details/summary)
+   ========================================================================== */
+.faq summary {
+  list-style: none;
+}
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+.faq[open] .faq-icon {
+  transform: rotate(45deg);
+}
+.faq[open] .faq-body {
+  animation: fade-up 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ==========================================================================
+   Multi-Step-Formular: ohne JS alle Schritte zeigen
+   ========================================================================== */
+html:not(.js) .form-step {
+  display: block !important;
+}
+html:not(.js) .form-nav-js,
+html:not(.js) .form-progress {
+  display: none !important;
+}
+
+/* Header-Zustand beim Scrollen */
+.site-header {
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.site-header.is-scrolled {
+  @apply border-navy-100 bg-white/85 shadow-glass;
+}
+
+/* Timeline-Linie (wird per GSAP scaleY animiert) */
+.timeline-line {
+  transform-origin: top center;
+}

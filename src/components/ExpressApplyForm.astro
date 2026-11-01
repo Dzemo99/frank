@@ -1,0 +1,93 @@
+---
+/**
+ * EXPRESS-BEWERBUNG: 3 Klicks + Telefonnummer, ohne Anschreiben.
+ * Netlify Forms (name="bewerbung").
+ */
+import { Icon } from 'astro-icon/components';
+import { jobs } from '../data/jobs';
+
+const availability = ['Sofort', 'Innerhalb von 4 Wochen', 'Später / flexibel'];
+const workload = ['Vollzeit', 'Teilzeit', 'Minijob'];
+---
+
+<form
+  name="bewerbung"
+  method="POST"
+  action="/danke"
+  data-netlify="true"
+  netlify-honeypot="bot-field"
+  data-netlify-ajax
+  data-redirect="/danke"
+  class="card p-6 sm:p-8"
+  novalidate
+  id="bewerbung"
+>
+  <input type="hidden" name="form-name" value="bewerbung" />
+  <p class="hidden"><label>Bitte dieses Feld leer lassen: <input name="bot-field" /></label></p>
+
+  <h3 class="text-xl font-bold text-navy-950">Express-Bewerbung</h3>
+  <p class="mt-1 text-sm text-navy-600">Drei Klicks und Ihre Telefonnummer – wir rufen Sie zurück. Kein Anschreiben, kein Lebenslauf nötig.</p>
+
+  <fieldset class="mt-6" data-field="stelle">
+    <legend class="label">1. Welche Stelle interessiert Sie?</legend>
+    <div class="grid gap-2 sm:grid-cols-2">
+      {jobs.map((j) => (
+        <label class="choice py-3">
+          <input type="radio" name="stelle" value={j.title} required />
+          <span class="choice-icon h-8 w-8 rounded-lg"><Icon name={j.icon} class="h-4 w-4" /></span>
+          <span class="text-sm font-semibold">{j.title}</span>
+        </label>
+      ))}
+    </div>
+    <p class="field-error">Bitte wählen Sie eine Stelle.</p>
+  </fieldset>
+
+  <fieldset class="mt-5" data-field="umfang">
+    <legend class="label">2. Gewünschter Umfang</legend>
+    <div class="grid grid-cols-3 gap-2">
+      {workload.map((w) => (
+        <label class="choice justify-center py-3">
+          <input type="radio" name="umfang" value={w} required />
+          <span class="text-sm font-semibold">{w}</span>
+        </label>
+      ))}
+    </div>
+    <p class="field-error">Bitte wählen Sie einen Umfang.</p>
+  </fieldset>
+
+  <fieldset class="mt-5" data-field="verfuegbar">
+    <legend class="label">3. Ab wann?</legend>
+    <div class="grid gap-2 sm:grid-cols-3">
+      {availability.map((a) => (
+        <label class="choice justify-center py-3">
+          <input type="radio" name="verfuegbar" value={a} required />
+          <span class="text-sm font-semibold">{a}</span>
+        </label>
+      ))}
+    </div>
+    <p class="field-error">Bitte wählen Sie eine Verfügbarkeit.</p>
+  </fieldset>
+
+  <div class="mt-5 grid gap-4 sm:grid-cols-2">
+    <div data-field="name">
+      <label for="b-name" class="label">Ihr Name</label>
+      <input id="b-name" name="name" type="text" class="input" autocomplete="name" required />
+      <p class="field-error">Bitte geben Sie Ihren Namen an.</p>
+    </div>
+    <div data-field="telefon">
+      <label for="b-telefon" class="label">Telefonnummer für den Rückruf</label>
+      <input id="b-telefon" name="telefon" type="tel" class="input" autocomplete="tel" inputmode="tel" required pattern="^[+0-9 ()/.-]{6,}$" />
+      <p class="field-error">Bitte geben Sie eine gültige Telefonnummer an.</p>
+    </div>
+  </div>
+
+  <div class="mt-5" data-field="datenschutz">
+    <label class="flex items-start gap-3 text-sm text-navy-700">
+      <input type="checkbox" name="datenschutz" value="ja" class="checkbox" required />
+      <span>Ich habe die <a href="/datenschutz" class="font-semibold text-electric-600 underline underline-offset-2" target="_blank">Datenschutzerklärung</a> gelesen und bin mit der Verarbeitung meiner Angaben im Rahmen des Bewerbungsverfahrens einverstanden.</span>
+    </label>
+    <p class="field-error">Bitte stimmen Sie der Datenschutzerklärung zu.</p>
+  </div>
+  <p class="mt-4 hidden rounded-xl bg-red-50 p-3 text-sm text-red-700" role="alert" data-form-status></p>
+  <button type="submit" class="btn-primary btn-lg mt-6 w-full">Rückruf anfordern <Icon name="lucide:phone" class="h-5 w-5" /></button>
+</form>

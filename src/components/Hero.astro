@@ -1,0 +1,132 @@
+---
+/**
+ * HERO – Headline-Reveal, Parallax-Hintergrund, Trust-Badges (nur aktive),
+ * Leistungsversprechen und CTA zum Anfrageformular.
+ */
+import { Picture } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import { site, trustBadges, promises, ctaLabel } from '../data/site';
+import heroImage from '../assets/images/team-stimmung.png';
+
+interface Props {
+  eyebrow?: string;
+  headline?: string;
+  text?: string;
+  /** Bild überschreiben (Landingpages) */
+  image?: ImageMetadata;
+  imageAlt?: string;
+  primaryHref?: string;
+  primaryLabel?: string;
+  compact?: boolean;
+}
+const {
+  eyebrow = 'Gewerbliche Gebäudereinigung · Frankfurt am Main & Rhein-Main',
+  headline = 'Premium Gebäudereinigung in Frankfurt & Rhein-Main',
+  text = 'Büro, Praxis, Baustelle oder Glasfassade: Wir reinigen gewerbliche Objekte mit festem Personal, digitaler Qualitätskontrolle und klaren Leistungsverzeichnissen – damit Sie sich um Ihr Geschäft kümmern können.',
+  image = heroImage,
+  imageAlt = 'Reinigungsteam in schwarzer Arbeitskleidung vor einem modernen Bürogebäude',
+  primaryHref = '#anfrage',
+  primaryLabel = ctaLabel,
+  compact = false,
+} = Astro.props;
+
+const words = headline.split(' ');
+const activeBadges = trustBadges.filter((b) => b.active);
+---
+
+<section
+  class:list={['relative isolate overflow-hidden bg-navy-950 text-white', compact ? 'pb-16 pt-12 lg:pb-24 lg:pt-20' : 'pb-24 pt-14 lg:pb-32 lg:pt-24']}
+  data-parallax-container
+>
+  <!-- Hintergrundbild + Overlays -->
+  <div class="absolute inset-0 -z-10">
+    <div class="absolute inset-[-8%]" data-parallax="14">
+      <Picture
+        src={image}
+        alt={imageAlt}
+        formats={['avif', 'webp']}
+        fallbackFormat="jpg"
+        quality={72}
+        widths={[640, 1024, 1600, 2000]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+        class="h-full w-full object-cover object-center opacity-40"
+        pictureAttributes={{ class: 'block h-full w-full' }}
+      />
+    </div>
+    <div class="absolute inset-0 bg-gradient-to-r from-navy-950 via-navy-950/85 to-navy-900/40"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-transparent to-navy-950/60"></div>
+    <div class="absolute -left-40 top-1/3 h-[32rem] w-[32rem] rounded-full bg-accent-500/15 blur-3xl"></div>
+  </div>
+
+  <div class="container-x">
+    <div class="max-w-3xl">
+      <p class="eyebrow eyebrow-light" data-hero-item>{eyebrow}</p>
+
+      <h1 class="mt-5 text-display-xl text-white">
+        {words.map((w, i) => (
+          <>
+            <span class="word-reveal"><span>{w}</span></span>
+            {i < words.length - 1 && ' '}
+          </>
+        ))}
+      </h1>
+
+      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-white/80 sm:text-xl" data-hero-item>{text}</p>
+
+      <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center" data-hero-item>
+        <a href={primaryHref} class="btn-primary btn-lg">
+          {primaryLabel}
+          <Icon name="lucide:arrow-right" class="h-5 w-5" />
+        </a>
+        <a href={site.phone.href} data-place="hero" class="btn-outline-light btn-lg">
+          <Icon name="lucide:phone" class="h-5 w-5" />
+          {site.phone.display}
+        </a>
+      </div>
+
+      <!-- Leistungsversprechen -->
+      <ul class="mt-10 flex flex-wrap gap-2" data-hero-item>
+        {promises.map((p) => (
+          <li class="chip-dark">
+            <Icon name={p.icon} class="h-3.5 w-3.5 text-accent-300" />
+            {p.text}
+          </li>
+        ))}
+      </ul>
+
+      <!-- Trust-Badges: nur echte Nachweise (active: true in src/data/site.ts) -->
+      {activeBadges.length > 0 && (
+        <ul class="mt-8 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3" data-hero-item>
+          {activeBadges.map((b) => {
+            const Wrapper = b.href ? 'a' : 'div';
+            return (
+              <li>
+                <Wrapper href={b.href} class="glass-dark flex items-center gap-3 rounded-2xl p-3" target={b.href ? '_blank' : undefined} rel={b.href ? 'noopener' : undefined}>
+                  <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent-500/20 text-accent-300">
+                    <Icon name={b.icon} class="h-5 w-5" />
+                  </span>
+                  <span class="text-sm">
+                    <span class="block font-semibold leading-tight">{b.label}</span>
+                    {b.sub && <span class="block text-xs text-white/60">{b.sub}</span>}
+                  </span>
+                </Wrapper>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </div>
+  </div>
+
+  <!-- Scroll-Hinweis -->
+  {!compact && (
+    <div class="absolute bottom-6 left-1/2 hidden -translate-x-1/2 lg:block" aria-hidden="true">
+      <span class="block h-10 w-6 rounded-full border border-white/25 p-1">
+        <span class="block h-2 w-1.5 animate-float rounded-full bg-accent-400"></span>
+      </span>
+    </div>
+  )}
+</section>

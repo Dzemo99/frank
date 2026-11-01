@@ -1,0 +1,17 @@
+# Abhängigkeiten
+node_modules/
+
+# Build-Ausgabe
+dist/
+.astro/
+.netlify/
+
+# Umgebungsvariablen (echte IDs niemals committen)
+.env
+.env.*
+!.env.example
+
+# System
+.DS_Store
+Thumbs.db
+npm-debug.log*

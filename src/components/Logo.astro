@@ -1,0 +1,26 @@
+---
+/**
+ * Wortmarke – angelehnt an das Logo auf der Arbeitskleidung (Dachsilhouette
+ * + Schriftzug in eckigen Klammern). Reines SVG + HTML, keine Bilddatei nötig.
+ * Sobald eine offizielle Logodatei vorliegt: hier gegen <Image /> tauschen.
+ */
+interface Props {
+  variant?: 'dark' | 'light';
+  class?: string;
+}
+const { variant = 'dark', class: className = '' } = Astro.props;
+const text = variant === 'light' ? 'text-white' : 'text-navy-950';
+const stroke = variant === 'light' ? '#ffffff' : '#13203b';
+---
+
+<span class:list={['inline-flex items-center gap-2.5', className]}>
+  <svg viewBox="0 0 44 36" class="h-8 w-auto shrink-0" aria-hidden="true" fill="none">
+    <path d="M3 24 L22 6 L41 24" stroke={stroke} stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M14 13.5 V7.5 H19" stroke={stroke} stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M10 31 H34" stroke="#22d3ee" stroke-width="3.4" stroke-linecap="round" />
+  </svg>
+  <span class:list={['font-display leading-none', text]}>
+    <span class="block text-[0.95rem] font-extrabold tracking-[0.12em]">IDEALE</span>
+    <span class="mt-0.5 block text-[0.58rem] font-semibold tracking-[0.2em] opacity-80">GEBÄUDEREINIGUNG</span>
+  </span>
+</span>

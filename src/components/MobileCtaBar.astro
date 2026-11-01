@@ -1,0 +1,21 @@
+---
+/** Fixe Aktionsleiste auf Mobilgeräten – Anruf, WhatsApp, Angebot */
+import { Icon } from 'astro-icon/components';
+import { site } from '../data/site';
+---
+
+<div class="fixed inset-x-0 bottom-0 z-40 border-t border-navy-100 bg-white/90 pb-safe backdrop-blur-xl sm:hidden" role="region" aria-label="Schnellkontakt">
+  <div class="grid grid-cols-3 gap-2 p-2">
+    <a href={site.phone.href} data-place="mobile-bar" class="flex flex-col items-center justify-center gap-1 rounded-xl py-2 text-[11px] font-semibold text-navy-900">
+      <Icon name="lucide:phone" class="h-5 w-5" /> Anrufen
+    </a>
+    <a href={site.whatsapp.href} data-place="mobile-bar" target="_blank" rel="noopener" class="flex flex-col items-center justify-center gap-1 rounded-xl py-2 text-[11px] font-semibold text-navy-900">
+      <Icon name="lucide:message-circle" class="h-5 w-5" /> WhatsApp
+    </a>
+    <a href="/#anfrage" class="flex flex-col items-center justify-center gap-1 rounded-xl bg-accent-gradient py-2 text-[11px] font-bold text-navy-950 shadow-glow">
+      <Icon name="lucide:send" class="h-5 w-5" /> Angebot
+    </a>
+  </div>
+</div>
+<!-- Platz für die Leiste, damit der Footer nicht verdeckt wird -->
+<div class="h-16 sm:hidden" aria-hidden="true"></div>

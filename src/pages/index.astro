@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import ServiceCards from '../components/ServiceCards.astro';
+import WhyUs from '../components/WhyUs.astro';
+import RegionFocus from '../components/RegionFocus.astro';
+import Testimonials from '../components/Testimonials.astro';
+import MultiStepForm from '../components/MultiStepForm.astro';
+import ProcessTimeline from '../components/ProcessTimeline.astro';
+import { site } from '../data/site';
+---
+
+<Layout
+  title="Gebäudereinigung Frankfurt | Büro-, Glas-, Bau- & Praxisreinigung"
+  description={site.description}
+  canonical="/"
+>
+  <Hero />
+  <ServiceCards />
+  <WhyUs />
+  <RegionFocus />
+  <Testimonials />
+  <ProcessTimeline />
+  <MultiStepForm />
+</Layout>

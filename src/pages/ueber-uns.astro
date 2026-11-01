@@ -1,0 +1,86 @@
+---
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import LocationCards from '../components/LocationCards.astro';
+import ServiceAreaMap from '../components/ServiceAreaMap.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import { serviceAreas } from '../data/site';
+import hebebuehne from '../assets/images/hebebuehne-fassade.jpg';
+import stein from '../assets/images/stein.png';
+
+const values = [
+  { icon: 'lucide:target', title: 'Klarheit', text: 'Leistungsverzeichnis, feste Zeiten, feste Ansprechpersonen. Sie wissen immer, was Sie bekommen.' },
+  { icon: 'lucide:badge-check', title: 'Verlässlichkeit', text: 'Wir halten Termine, Zusagen und Standards ein – jeden Tag, in jedem Objekt.' },
+  { icon: 'lucide:heart-handshake', title: 'Respekt', text: 'Gegenüber Kunden, Mitarbeitenden und den Gebäuden, in denen wir arbeiten.' },
+  { icon: 'lucide:leaf', title: 'Verantwortung', text: 'Umweltverträgliche Mittel, sparsamer Ressourceneinsatz, faire Arbeitsbedingungen.' },
+];
+---
+
+<Layout
+  title="Über uns – Gebäudereinigung mit Niederlassung in Frankfurt"
+  description="Die Ideale Gebäudereinigung: Niederlassung Frankfurt am Main, Verwaltung Göttingen, Einsatzgebiet Rhein-Main. Lernen Sie unsere Arbeitsweise und Werte kennen."
+  canonical="/ueber-uns"
+  ogImage={stein}
+>
+  <Hero
+    compact
+    eyebrow="Über uns"
+    headline="Gebäudereinigung mit Haltung – aus Frankfurt für Rhein-Main"
+    text="Wir sind ein gewerblicher Reinigungsdienstleister mit Niederlassung in Frankfurt am Main und Verwaltung in Göttingen. Unser Anspruch: Sauberkeit, die man sieht – und Prozesse, die man prüfen kann."
+    image={stein}
+    imageAlt="Mitarbeiter reinigt Pflasterfläche mit Flächenreiniger, links verschmutzt, rechts sauber"
+  />
+
+  <section class="section bg-white">
+    <div class="container-x grid items-center gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-6" data-reveal>
+        <p class="eyebrow">Wer wir sind</p>
+        <h2 class="mt-3 text-display-lg">Zwei Standorte, ein Anspruch</h2>
+        <p class="mt-5 text-navy-700">
+          Von unserer <strong>Niederlassung in Frankfurt am Main</strong> aus betreuen wir Objekte im gesamten Rhein-Main-Gebiet: Büros im Bankenviertel, Praxen, Gewerbeparks in Eschborn und Offenbach, Baustellen und Fassaden. Hier sitzt unsere Einsatzleitung, hier starten Besichtigungen und Qualitätskontrollen.
+        </p>
+        <p class="mt-4 text-navy-700">
+          Unsere <strong>Verwaltung in Göttingen</strong> kümmert sich um Angebote, Verträge, Rechnungen und Personal – damit sich unsere Teams vor Ort voll auf Ihr Objekt konzentrieren können.
+        </p>
+        <ul class="mt-8 grid gap-4 sm:grid-cols-2" data-reveal-group>
+          {values.map((v) => (
+            <li class="flex gap-3">
+              <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-navy-950 text-accent-300"><Icon name={v.icon} class="h-5 w-5" /></span>
+              <div><p class="font-bold text-navy-950">{v.title}</p><p class="mt-0.5 text-sm text-navy-700">{v.text}</p></div>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div class="lg:col-span-6" data-reveal>
+        <div class="grid grid-cols-5 gap-4">
+          <div class="col-span-3 overflow-hidden rounded-4xl shadow-lift">
+            <Image src={stein} alt="Flächenreinigung einer Pflasterfläche vor einem Gewerbeobjekt" width={720} height={900} format="webp" quality={78} loading="lazy" decoding="async" class="h-full w-full object-cover" />
+          </div>
+          <div class="col-span-2 mt-12 overflow-hidden rounded-4xl shadow-lift">
+            <Image src={hebebuehne} alt="Hebebühne an einer Glasfassade eines Bürogebäudes" width={480} height={800} format="webp" quality={78} loading="lazy" decoding="async" class="h-full w-full object-cover" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-mist-50">
+    <div class="container-x">
+      <div class="max-w-3xl" data-reveal>
+        <p class="eyebrow">Standorte & Einsatzgebiet</p>
+        <h2 class="mt-3 text-display-lg">Vor Ort in Frankfurt, schnell im ganzen Rhein-Main-Gebiet</h2>
+      </div>
+      <div class="mt-12 grid gap-8 lg:grid-cols-12 lg:items-start">
+        <div class="lg:col-span-7"><LocationCards withMap={false} /></div>
+        <div class="lg:col-span-5" data-reveal>
+          <div class="rounded-4xl bg-navy-950 p-4"><ServiceAreaMap /></div>
+          <ul class="mt-4 flex flex-wrap gap-2">{serviceAreas.map((c) => <li class="chip">{c}</li>)}</ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CtaBanner title="Lernen Sie uns persönlich kennen" text="Vereinbaren Sie eine kostenlose Besichtigung – wir kommen zu Ihnen ins Objekt." />
+</Layout>

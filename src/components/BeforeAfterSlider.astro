@@ -1,0 +1,55 @@
+---
+/**
+ * VORHER/NACHHER-SLIDER
+ * Props: before/after (ImageMetadata, gleiche Größe!), title.
+ * Steuerung: Range-Input (Tastatur + Screenreader) und Pointer-Drag.
+ * Logik: src/scripts/before-after.ts – Styles: .ba* in global.css
+ */
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  before: ImageMetadata;
+  after: ImageMetadata;
+  title: string;
+  beforeLabel?: string;
+  afterLabel?: string;
+}
+const { before, after, title, beforeLabel = 'Vorher', afterLabel = 'Nachher' } = Astro.props;
+const isSvg = (img: ImageMetadata) => img.format === 'svg';
+---
+
+<figure class="ba aspect-[16/10] shadow-lift" data-before-after>
+  <div class="ba-after">
+    {isSvg(after) ? (
+      <img src={after.src} alt={`${title} – ${afterLabel}`} width={after.width} height={after.height} loading="lazy" decoding="async" />
+    ) : (
+      <Image src={after} alt={`${title} – ${afterLabel}`} width={1200} height={750} format="webp" quality={80} loading="lazy" decoding="async" />
+    )}
+    <span class="ba-label right-3 bg-accent-400/90 text-navy-950">{afterLabel}</span>
+  </div>
+  <div class="ba-before">
+    {isSvg(before) ? (
+      <img src={before.src} alt={`${title} – ${beforeLabel}`} width={before.width} height={before.height} loading="lazy" decoding="async" />
+    ) : (
+      <Image src={before} alt={`${title} – ${beforeLabel}`} width={1200} height={750} format="webp" quality={80} loading="lazy" decoding="async" />
+    )}
+    <span class="ba-label left-3 bg-navy-950/70 text-white">{beforeLabel}</span>
+  </div>
+  <div class="ba-handle" aria-hidden="true">
+    <span><Icon name="lucide:move-horizontal" class="h-5 w-5" /></span>
+  </div>
+  <input
+    type="range"
+    class="ba-range"
+    min="0"
+    max="100"
+    value="50"
+    step="0.5"
+    aria-label={`Vergleich ${beforeLabel}/${afterLabel}: ${title}`}
+    aria-valuemin="0"
+    aria-valuemax="100"
+    aria-valuenow="50"
+  />
+  <figcaption class="sr-only">{title}: Schieberegler zum Vergleich von {beforeLabel} und {afterLabel}.</figcaption>
+</figure>

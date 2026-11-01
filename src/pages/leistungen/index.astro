@@ -1,0 +1,54 @@
+---
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import Layout from '../../layouts/Layout.astro';
+import Hero from '../../components/Hero.astro';
+import MultiStepForm from '../../components/MultiStepForm.astro';
+import CtaBanner from '../../components/CtaBanner.astro';
+import { services } from '../../data/services';
+import buero from '../../assets/images/buero.png';
+---
+
+<Layout
+  title="Leistungen – Gewerbliche Gebäudereinigung in Frankfurt & Rhein-Main"
+  description="Alle Leistungen der Ideale Gebäudereinigung im Überblick: Büro- & Unterhaltsreinigung, Glas- & Fassadenreinigung, Baureinigung, Praxis- & Hygienereinigung, Sonder- & Grundreinigung in Frankfurt."
+  canonical="/leistungen"
+>
+  <Hero
+    compact
+    eyebrow="Leistungen"
+    headline="Gebäudereinigung für jedes gewerbliche Objekt"
+    text="Fünf Kernleistungen, ein fester Ansprechpartner. Wählen Sie Ihre Leistung – auf jeder Seite finden Sie Umfang, Ablauf, Antworten auf häufige Fragen und den direkten Weg zum Angebot."
+    image={buero}
+    imageAlt="Reinigungsteam reinigt abends ein modernes Großraumbüro"
+  />
+
+  <section class="section bg-mist-50">
+    <div class="container-x space-y-8">
+      {services.map((s, i) => (
+        <article class="card overflow-hidden lg:grid lg:grid-cols-12" data-reveal>
+          <div class:list={['relative aspect-[16/10] lg:aspect-auto lg:col-span-5', i % 2 === 1 && 'lg:order-2']}>
+            <Image src={s.image} alt={s.imageAlt} width={900} height={620} format="webp" quality={78} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" class="h-full w-full object-cover" />
+          </div>
+          <div class="p-6 sm:p-8 lg:col-span-7 lg:p-10">
+            <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-navy-950 text-accent-300"><Icon name={s.icon} class="h-6 w-6" /></span>
+            <h2 class="mt-4 text-display-md"><a href={`/leistungen/${s.slug}`} class="hover:text-electric-600">{s.name}</a></h2>
+            <p class="mt-3 text-navy-700">{s.teaser}</p>
+            <ul class="mt-5 grid gap-2 sm:grid-cols-2">
+              {s.checklist.slice(0, 4).map((c) => (
+                <li class="flex items-start gap-2 text-sm text-navy-800"><Icon name="lucide:check" class="mt-0.5 h-4 w-4 shrink-0 text-electric-600" /> {c}</li>
+              ))}
+            </ul>
+            <div class="mt-6 flex flex-wrap gap-3">
+              <a href={`/leistungen/${s.slug}`} class="btn-dark btn-sm">Details & FAQ <Icon name="lucide:arrow-right" class="h-4 w-4" /></a>
+              <a href={`#anfrage`} class="btn-outline btn-sm">Angebot anfragen</a>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <CtaBanner title="Nicht sicher, welche Leistung passt?" text="Beschreiben Sie uns Ihr Objekt – wir empfehlen die passende Kombination und erstellen ein Angebot." />
+  <MultiStepForm />
+</Layout>
